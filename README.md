@@ -252,7 +252,7 @@ Padding всего отчета 10px.
 
 ``` json
     {
-      "type": "blockList",
+      "type": "diaryFood",
       
       "data": {
         "title": "Завтрак",
