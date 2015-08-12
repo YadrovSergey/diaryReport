@@ -61,7 +61,7 @@
     {
       "type": "text",
       "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. ...",
-      maxWidth: 400
+      "maxWidth": 400
     }
 ```
 
@@ -103,6 +103,15 @@
 
 *data.rows* - Строки описывающие упражнение.
 
+*data.rows[].title* - Наименование первой колонки. Ширина колонки равна 210px
+
+*data.rows[].values* - Значения для заполнения ячеек. Может быть так, что не для всех ячеек будут переданы значения. Т.е. они просто остануться пустыми.
+
+*data.rows[].values[].cell* - Номер ячейки 
+
+*data.rows[].values[].value* - Значение подставляемое в ячейку.
+Ширина ячейки 50px
+
 ``` json
     {
       "type": "diaryExercise",
@@ -124,7 +133,7 @@
             
              {
             "title": "Вес снаяряда", 
-            "values": [{"cell": 1, "value": "30"}], [{"cell": 4, "value": "30"}] 
+            "values": [{"cell": 1, "value": "30"}], {"cell": 4, "value": "30"}] 
             }
         ]
       }
