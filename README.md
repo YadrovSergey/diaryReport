@@ -76,8 +76,8 @@
 
 ``` json
     {
-      "type": "text",
-      "title": "Итоги за день"
+      "type": "blockList",
+      "title": "Итоги за день",
       "data": [
         "Энергозатраты: 80 ккал",
         "Количество повто......"
@@ -87,6 +87,25 @@
 ```
 
 ![](http://storage-145851-1.cs.clodoserver.ru/test/blockList.png)
+
+
+###Тип строки - **diaryExercise**
+
+Упражнение в дневнике тренировок. 
+
+*title* - Наименование упражнения.
+
+``` json
+    {
+      "type": "diaryExercise",
+      "title": "Разгибание рук в наклоне",
+      "data": []
+
+    }
+```
+
+![](http://storage-145851-1.cs.clodoserver.ru/test/diaryExercise.png)
+
 
 
 
