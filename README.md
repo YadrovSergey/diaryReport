@@ -85,7 +85,7 @@ Padding всего отчета 10px.
 ```
 
 
-![](http://storage-145851-1.cs.clodoserver.ru/test/blockList.png)
+![](http://storage-145851-1.cs.clodoserver.ru/test/text.png)
 
 ..................................................................
 
