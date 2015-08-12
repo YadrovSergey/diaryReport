@@ -239,3 +239,9 @@
 ![](http://storage-145851-1.cs.clodoserver.ru/test/sportProgramDay.png)
 
 ..................................................................
+
+
+##Примеры отчетов, которые можно будет сделать
+![](http://storage-145851-1.cs.clodoserver.ru/test/2015-08-12_10-35-04.png)
+
+![](http://storage-145851-1.cs.clodoserver.ru/test/example.png
