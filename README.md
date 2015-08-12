@@ -151,6 +151,7 @@
     }
 ```
 
+![](http://storage-145851-1.cs.clodoserver.ru/test/diaryExercise.png)
 
 ###Тип строки - **diarySuperSet**
 
@@ -184,9 +185,6 @@
 
 ![](http://storage-145851-1.cs.clodoserver.ru/test/superset.png)
 
-
-
-![](http://storage-145851-1.cs.clodoserver.ru/test/diaryExercise.png)
 
 ###Тип строки - **sportProgramDay**
 
