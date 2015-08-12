@@ -29,6 +29,7 @@
 Итоговая сборка должна создать один минифицированный файл (umd).
 
 
+
 ###Тип строки - **header**
 
 Данный тип строки служит для отображения заголовка отчета.
@@ -144,6 +145,41 @@
 
     }
 ```
+
+
+###Тип строки - **diarySuperSet**
+
+Суперсет в дневнике тренировок. Это объединение несколких упражнений в один блок.
+
+
+
+``` json
+    {
+      "type": "diarySuperSet",
+
+      "data": {
+        "title": "Суперсет",
+        "count": 10,
+        "groups": [
+          {"start": 1, "end": 3},
+          {"start": 4, "end": 6},
+          {"start": 7, "end": 8}
+        ],
+        "outcomeSport": 25,
+        "exercise": [
+            {
+              "см. описание типа строки diaryExercise":1
+            }
+        
+        ]
+      }
+
+    }
+```
+
+![](http://storage-145851-1.cs.clodoserver.ru/test/superset.png)
+
+
 
 ![](http://storage-145851-1.cs.clodoserver.ru/test/diaryExercise.png)
 
