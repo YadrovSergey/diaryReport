@@ -138,12 +138,12 @@
         "rows": [
             {
             "title": "Количество повторений", 
-            "values": [{"cell": 1, "value": "10"}], {"cell": 4, "value": "9"}] 
+            "values": [{"cell": 1, "value": "10"}, {"cell": 4, "value": "9"}] 
             },
             
              {
             "title": "Вес снаряда", 
-            "values": [{"cell": 1, "value": "30"}], {"cell": 4, "value": "30"}] 
+            "values": [{"cell": 1, "value": "30"}, {"cell": 4, "value": "30"}] 
             }
         ]
       }
