@@ -51,5 +51,22 @@
 
 ![](http://storage-145851-1.cs.clodoserver.ru/test/subHeader.png)
 
+###Тип строки - **text**
+
+Абзац с текстом. 
+
+*maxWidth* - Максимальная ширина абазаца.
+
+``` json
+    {
+      "type": "text",
+      "data": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. ...",
+      maxWidth: 400
+    }
+```
+
+![](http://storage-145851-1.cs.clodoserver.ru/test/text.png)
+
+
 
 
