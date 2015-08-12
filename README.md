@@ -65,7 +65,28 @@
     }
 ```
 
-![](http://storage-145851-1.cs.clodoserver.ru/test/text.png)
+![](http://storage-145851-1.cs.clodoserver.ru/test/blockList.png)
+
+
+###Тип строки - **blockList**
+
+Список в блоке. 
+
+*title* - Заголовок блока.
+
+``` json
+    {
+      "type": "text",
+      "title": "Итоги за день"
+      "data": [
+        "Энергозатраты: 80 ккал",
+        "Количество повто......"
+      ]
+
+    }
+```
+
+![](http://storage-145851-1.cs.clodoserver.ru/test/blockList.png)
 
 
 
