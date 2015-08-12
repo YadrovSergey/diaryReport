@@ -7,10 +7,10 @@
 
 ``` json
   {
-    items: [
+    "items": [
       {
-        type: "type_of_item",
-        data: {"Данные":1}
+        "type": "type_of_item",/*вввввв*/
+        "data": {"Данные":1}
       },
       {"..."}
     ]
