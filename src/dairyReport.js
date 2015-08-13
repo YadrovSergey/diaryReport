@@ -16,11 +16,16 @@ DairyReport.prototype = {
 
   _styles: {
     header: {
-      fontSize: 14,
+      fontSize: 16,
       fill: 'rgb(28, 28, 28)',
       fontFamily: 'Tahoma'
     },
     subHeader: {
+      fontSize: 14,
+      fill: 'rgb(28, 28, 28)',
+      fontFamily: 'Tahoma'
+    },
+    text: {
       fontSize: 12,
       fill: 'rgb(28, 28, 28)',
       fontFamily: 'Tahoma'
@@ -44,17 +49,13 @@ DairyReport.prototype = {
     items.map(function(item) {
       var method = item.type;
       if (isFunction(self[method]))
-        self[method](item.data);
+        self[method](item);
     });
 
   },
 
-  header: function(data) {
-    var styles;
-    styles = this._styles.header;
-    styles.top = this._topPos;
-
-    var text = new fabric.Text(data, this._styles.header),
+  header: function(item) {
+    var text = new fabric.Text(item.data, this._styles.header),
         line = new fabric.Rect({
           left: 0,
           top: text.getTop() + text.getHeight(),
@@ -64,13 +65,41 @@ DairyReport.prototype = {
         });
 
     line.marginBottom = 10;
+    line.isLine = true;
 
     this._queue.push(text, line);
-    this._lines.push(line);
   },
 
-  subHeader: function(data) {
-    var text = new fabric.Text(data, this._styles.subHeader);
+  subHeader: function(item) {
+    var text = new fabric.Text(item.data, this._styles.subHeader);
+    this._queue.push(text);
+  },
+
+  text: function(item) {
+    var text = new fabric.Text(item.data, this._styles.text),
+        self = this;
+
+    if (item.maxWidth && text.getWidth() > item.maxWidth) {
+      var words = item.data.split(' '),
+          line = '',
+          lines = '',
+          limit = item.maxWidth;
+
+      words.map(function(word) {
+        text = new fabric.Text(line + word, self._styles.text);
+        if (text.getWidth() > limit) {
+          lines += line+'\n';
+          line = word + ' ';
+        } else {
+          line += word + ' ';
+        }
+      });
+
+      lines += line;
+      text = new fabric.Text(lines, this._styles.text);
+    }
+
+
     this._queue.push(text);
   },
 
@@ -80,16 +109,19 @@ DairyReport.prototype = {
         width = 0;
 
     this._queue.map(function(item) {
+      width = width > item.getWidth() ? width : item.getWidth();
+    });
+
+    canvas.setDimensions({ width: width });
+
+    this._queue.map(function(item) {
       item.setTop(top);
       top = item.getTop() + item.getHeight();
 
       if (item.marginBottom) top += item.marginBottom;
-
-      width = width > item.getWidth() ? width : item.getWidth();
+      if (item.isLine) item.width = 400;
       canvas.add(item);
     });
-
-    canvas.setDimensions({ width: width });
 
     this._queue = [];
 
