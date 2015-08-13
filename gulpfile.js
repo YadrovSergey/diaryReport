@@ -33,7 +33,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('./lib/dairyReport.js', ['build']);
+  gulp.watch('./src/dairyReport.js', ['build']);
 });
 
 gulp.task('default', ['build', 'watch', 'serve']);
