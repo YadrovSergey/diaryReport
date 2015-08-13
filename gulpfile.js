@@ -3,6 +3,7 @@ var gulp = require('gulp'),
 
 gulp.task('build', function() {
   return gulp.src('./src/dairyReport.js')
+    .pipe($.plumber())
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.umd({
