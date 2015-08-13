@@ -1,5 +1,5 @@
 # diaryReport
-Формирование отчетов на canvas с помощью fabric.js.
+Формирование отчетов на canvas с помощью fabric.js (библиотека для работы с canvas http://fabricjs.com/).
 
 ##Релизовать функцию diaryReport
 Результат diaryReport(jsonObject) - это fabric объект, построенный по входящим данным. 
