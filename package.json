@@ -2,7 +2,7 @@
   "name": "dairyReport",
   "version": "1.0.0",
   "description": "Формирование отчетов на canvas с помощью fabric.js (библиотека для работы с canvas http://fabricjs.com/).",
-  "main": "index.js",
+  "main": "lib/dairyReport.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/desker/dairyReport"
   },
-  "author": "Serg Desker <desker.me@gmail.com>",
+  "author": "Sergey Karinskiy <karinsky.name@gmail.ru>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/desker/dairyReport/issues"

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "homepage": "https://github.com/desker/dairyReport",
   "authors": [
-    "Sergey Karinskiy <sergey@karinskiy.ru>"
+    "Sergey Karinskiy <karinsky.name@gmail.ru>"
   ],
   "license": "MIT",
   "ignore": [
@@ -13,6 +13,7 @@
     "test",
     "tests"
   ],
+  "main": "lib/dairyReport.js",
   "dependencies": {
     "fabric": "~1.5.0"
   }
