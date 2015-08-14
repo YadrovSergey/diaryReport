@@ -50,12 +50,36 @@
           ]
         }
 
+      },
+      {
+        "type": "dairyExercise",
+
+        "data": {
+          "name": "Разгибание рук в наклоне",
+          "count": 10,
+          "groups": [
+            {"start": 1, "end": 3},
+            {"start": 4, "end": 6},
+            {"start": 7, "end": 8}
+          ],
+          "outcomeSport": 25,
+          "rows": [
+              {
+              "title": "Количество повторений", 
+              "values": [{"cell": 1, "value": "10"}, {"cell": 4, "value": "9"}] 
+              },
+
+               {
+              "title": "Вес снаряда", 
+              "values": [{"cell": 1, "value": "30"}, {"cell": 4, "value": "30"}] 
+              }
+          ]
+        }
+
       }
     ]};
 
     report.add(data);
-
-    report.draw('report');
 
     </script>
   </body>

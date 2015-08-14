@@ -23,8 +23,12 @@ function merge(json1, json2){
   return out;
 }
 
+var defaultFont = 'Tahoma',
+    detaultTextFill = '#1c1c1c',
+    cellWidth = 25;
+
 function DairyReport(canvasId) {
-  //var canvas = this._canvas = new fabric.Canvas(canvasId);
+  var canvas = this._canvas = new fabric.Canvas(canvasId);
 
 }
 
@@ -33,8 +37,8 @@ DairyReport.prototype = {
   _styles: {
     header: {
       fontSize: 16,
-      fill: '#1c1c1c',
-      fontFamily: 'Tahoma',
+      fill: detaultTextFill,
+      fontFamily: defaultFont,
       line: {
         fill: '#00aeb9',
         height: 2,
@@ -43,19 +47,19 @@ DairyReport.prototype = {
     },
     subHeader: {
       fontSize: 14,
-      fill: '#1c1c1c',
-      fontFamily: 'Tahoma'
+      fill: detaultTextFill,
+      fontFamily: defaultFont
     },
     text: {
       fontSize: 12,
-      fill: '#1c1c1c',
-      fontFamily: 'Tahoma'
+      fill: detaultTextFill,
+      fontFamily: defaultFont
     },
     blockList: {
       title: {
         fontSize: 14,
-        fill: '#1c1c1c',
-        fontFamily: 'Tahoma',
+        fill: detaultTextFill,
+        fontFamily: defaultFont,
         line: {
           fill: '#00aeb9',
           height: 1,
@@ -64,18 +68,39 @@ DairyReport.prototype = {
       },
       rows: {
         fontSize: 12,
-        fill: '#1c1c1c',
-        fontFamily: 'Tahoma',
+        fill: detaultTextFill,
+        fontFamily: defaultFont,
         line: {
           fill: '#E6E6E6',
           height: 1,
           marginBottom: 3
         }
       }
+    },
+    dairyExercise: {
+      name: {
+        fontSize: 14,
+        fill: detaultTextFill,
+        fontFamily: defaultFont,
+        line: {
+          fill: '#00aeb9',
+          height: 1,
+          marginBottom: 5
+        }
+      },
+      cell: {
+        width: 25
+      }
     }
   },
 
   _width: 0,
+
+  _height: 0,
+
+  _top: 0,
+
+  _lines: [],
 
   _queue: [],
 
@@ -95,19 +120,43 @@ DairyReport.prototype = {
 
   },
 
-  simpleText: function(data, styles) {
-    var text = new fabric.Text(data, styles);
-    if (styles.marginBottom) text.marginBottom = styles.marginBottom;
+  setSizes: function() {
+    var self = this;
+    this._lines.map(function(line) {
+      line.width = self._width;
+      self._canvas.add(line);
+    });
 
-    this._queue.push(text);
+    this._canvas.setDimensions({
+      width: this._width,
+      height: Math.round(this._top)
+    });
+  },
+
+  simpleText: function(data, styles) {
+    var text = new fabric.Text(data, styles),
+        self = this;
+
+    text.setTop(this._top);
+    this._canvas.add(text);
+
+    this._top += text.getHeight();
+    if (styles.marginBottom) this._top += styles.marginBottom;
+
+    if (text.getWidth() > this._width) {
+      this._width = text.getWidth();
+    }
 
     if (styles.line) {
       var line = new fabric.Rect(styles.line);
-      if (styles.line.marginBottom)
-        line.marginBottom = styles.line.marginBottom;
+      line.setTop(self._top);
+      self._top += line.getHeight();
+      if (styles.line.marginBottom) self._top += styles.line.marginBottom;
       line.isLine = true;
-      this._queue.push(line);
+      this._lines.push(line);
     }
+
+    this.setSizes();
   },
 
   header: function(item) {
@@ -120,13 +169,15 @@ DairyReport.prototype = {
 
   text: function(item) {
     var text = new fabric.Text(item.data, this._styles.text),
+        lines = item.data,
         self = this;
 
     if (item.maxWidth && text.getWidth() > item.maxWidth) {
-      var words = item.data.split(' '),
+      var words = lines.split(' '),
           line = '',
-          lines = '',
           limit = item.maxWidth;
+      
+      lines = '';
 
       words.map(function(word) {
         text = new fabric.Text(line + word, self._styles.text);
@@ -139,10 +190,9 @@ DairyReport.prototype = {
       });
 
       lines += line;
-      text = new fabric.Text(lines, this._styles.text);
     }
 
-    this._queue.push(text);
+    this.simpleText(lines, this._styles.text);
   },
 
   blockList: function(item) {
@@ -154,27 +204,10 @@ DairyReport.prototype = {
     });
   },
 
-  draw: function(canvasId) {
-    var canvas = new fabric.StaticCanvas(canvasId),
-        top = 0,
-        width = 0;
+  dairyExercise: function(item) {
+    this.simpleText(item.data.name, this._styles.dairyExercise.name);
 
-    this._queue.map(function(item) {
-      width = width > item.getWidth() ? width : item.getWidth();
-    });
-
-    canvas.setDimensions({ width: width });
-
-    this._queue.map(function(item) {
-      item.setTop(top);
-      top = item.getTop() + item.getHeight();
-      if (item.marginBottom) top += item.marginBottom;
-      if (item.isLine) item.width = width;
-      canvas.add(item);
-    });
-
-    this._queue = [];
-
+    var cells = item.data.count;
   }
-
+  
 };
