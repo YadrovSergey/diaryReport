@@ -77,6 +77,12 @@ DairyReport.prototype = {
         }
       }
     },
+    table: {
+      cell: {
+        width: 25,
+        height: 20
+      }
+    },
     dairyExercise: {
       name: {
         fontSize: 14,
@@ -104,8 +110,7 @@ DairyReport.prototype = {
         fontFamily: defaultFont,
         width: defaultCellWidth,
         borderColor: '#E6E6E6',
-        textAlign: 'center',
-        width: defaultCellWidth
+        textAlign: 'center'
       }
     }
   },
@@ -215,136 +220,165 @@ DairyReport.prototype = {
     });
   },
 
-  dairyExercise: function(item) {
-    var styles = this._styles.dairyExercise;
+  _tableRow: function(left, top, cells) {
+    var self = this,
+        styles = this._styles.table.cell,
+        style = { strokeWidth: 1, stroke: '#e6e6e6' },
+        x = left;
 
-    this.simpleText(item.data.name, styles.name);
-    
-    var cells = item.data.count,
-        self = this,
-        top = this._top,
-        titleWidth = 0,
-        titleHeight = 0,
-        cells = [];
+    cells.map(function(cell, i) {
+      x += cell.width;
+      if (i!==cells.length-1) {
+        var coords = [x, top, x, top + styles.height];
+        self._canvas.add(new fabric.Line(coords, style));
+      }
 
-    this.simpleText(' ', styles.rows);
+      var textStyle = self._styles.text,
+          text = new fabric.Text(cell.value, textStyle);
 
-    item.data.rows.map(function(row, i) {
-      var title = new fabric.Text(row.title, styles.rows);
-      titleWidth = title.getWidth() > titleWidth ? title.getWidth() : titleWidth;
-      titleHeight = title.getHeight();
-      self.simpleText(row.title, styles.rows);
-
-      row.values.map(function(cell) {
-        var s = styles.cell;
-        s.top = self._top - titleHeight - 9;
-        s.left = (cell.cell-1) * defaultCellWidth;
-        cells.push(new fabric.Text(cell.value, s));
-      });
+      if (i===0) {
+        text.left = x - cell.width + 5;
+        text.setColor('#616161');
+      } else {
+        text.left = x - cell.width + (cell.width - text.getWidth())/2;
+      }
+      text.top = top + styles.height - text.getHeight();
+      self._canvas.add(text);
     });
 
-    var groups = [],
-        end = 0,
-        gObj = [];
+    var underline = [left, top + styles.height, x, top + styles.height];
+    this._canvas.add(new fabric.Line(underline, style));
+    
+    this._width = x;
+    this._top = top + styles.height;
+
+    return {
+      width: x,
+      height: styles.height
+    };
+  },
+
+  _textWidth: function(text, style) {
+    var styles = style || this._styles.text,
+        fText = new fabric.Text(text, styles);
+
+    return fText.getWidth();
+  },
+
+  dairyExercise: function(item) {
+    var self = this,
+        groups = [{ width: 0, value: ' ' }],
+        headerCells = [{ width: 0, value: ' ' }],
+        lastGroup = 1,
+        titleWidth = 0,
+        tableWidth = 0,
+        tableHeight = 0,
+        cells = [],
+        rows = [];
+
+    var styles = this._styles.dairyExercise.name;
+    styles.left = 10;
+    
+    var name = new fabric.Text(item.data.name, merge({
+      left: 10,
+      top: this._top + 5
+    }, this._styles.dairyExercise.name));
+
+    var rect = new fabric.Rect({
+      left: 5, top: this._top,
+      width: 0, height: 0,
+      fill: '#fff'
+    });
+
+    this._top += name.getHeight();
+
+    styles = this._styles.dairyExercise.name.line;
+    styles.left = 10;
+    styles.top = this._top + 5;
+
+
+    var nameLine = new fabric.Rect(styles);
 
     for (var i = 0; i < item.data.groups.length; i++) {
-      gObj.push(item.data.groups[i]);
+      var g = item.data.groups,
+          width = (g[i].end - g[i].start + 1) * defaultCellWidth;
 
-      if (item.data.groups[i+1]) {
-        if (item.data.groups[i].end+1 != item.data.groups[i+1].start) {
-          gObj.push({
-            start: item.data.groups[i].end+1,
-            end: item.data.groups[i+1].start-1
-          });
+      groups.push({ width: width, value: lastGroup.toString() });
+      lastGroup++;
+
+      if (g[i+1] && g[i].end+1!==g[i+1].start) {
+        for (var j = g[i].end+1; j < g[i+1].start; j++) {
+          groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
+          lastGroup++;
         }
       }
-    };
-
-    if (item.data.groups) {
-      for (var i = 0; i < item.data.count + 1; i++) {
-        groups.push(0);
-      }
-      gObj.map(function(g) {
-        groups[g.start-1] = 1;
-        end = g.end;
-      });
-
-      for (var i = end; i < item.data.count + 1; i++) {
-        groups[i] = 1;
-        if (i!==item.data.count) gObj.push({ start: i+1, end: i+1 });
-      }
+      
     }
 
-    var left = titleWidth + 30,
-        lastLeft = 0;
+    for (i = item.data.groups[item.data.groups.length-1].end; i < item.data.count; i++) {
+      groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
+      lastGroup++;
+    }
+    groups.push({ width: defaultCellWidth*2, value: 'Итог' });
 
-    gObj.map(function(g, i) {
-      var hWidth = (g.end - g.start - 1)*defaultCellWidth,
-          hLeft = left + g.start*defaultCellWidth,
-          hStyle = styles.cell;
+    rows.push(groups);
 
-      hStyle.left = hLeft;
-      var header = new fabric.Text((i+1).toString(), hStyle);
-      header.left += (hWidth - header.getWidth())/2;
-      lastLeft = header.left;
-      header.top = top;
-      self._canvas.add(header);
-    });
-
-    var hStyle = styles.cell;
-    hStyle.top = top;
-
-    var totalHeader = new fabric.Text('Итог', hStyle);
-    totalHeader.left = lastLeft + defaultCellWidth + defaultCellWidth/4;
-    this._canvas.add(totalHeader);
-
-    var cTop = cells[0].getTop(),
-        sum = 0;
-    cells.map(function(cell) {
-      cell.left += left + (defaultCellWidth - cell.getWidth())/2;
-      if (cell.getTop()===cTop) sum += parseInt(cell.getText());
-      else {
-        hStyle.top = cTop;
-        hStyle.left = lastLeft + defaultCellWidth*1.25;
-        var t = new fabric.Text(sum.toString(), hStyle);
-        self._canvas.add(t);
-        sum = parseInt(cell.getText());
-        cTop = cell.getTop();
+    item.data.rows.map(function(row) {
+      titleWidth = titleWidth < self._textWidth(row.title) ? self._textWidth(row.title) : titleWidth;
+      var thisRow = [{ width: 0, value: row.title }],
+          sum = 0;
+      
+      for (var i = 0; i < item.data.count; i++) {
+        thisRow.push({ width: defaultCellWidth, value: ' ' });
       }
 
-      self._canvas.add(cell);
-    });
-
-    hStyle.top = cTop;
-    hStyle.left = lastLeft + defaultCellWidth*1.25;
-    var t = new fabric.Text(sum.toString(), hStyle);
-    self._canvas.add(t);
-
-    for (var i = 0; i < item.data.count + 1; i++) {
-      var h = this._top - top - 4,
-          t = top
-
-      if (groups.length!==0 && groups[i]==0) {
-        h = this._top - top - titleHeight - 7;
-        t = top + titleHeight + 4;
-      }
-
-      var line = new fabric.Rect({
-        width: 1,
-        height: h,
-        fill: '#e6e6e6',
-        left: left,
-        top: t
+      row.values.map(function(cell) {
+        if (thisRow[cell.cell]) {
+          thisRow[cell.cell].value = cell.value;
+          sum += parseInt(cell.value);
+        }
       });
-      this._canvas.add(line);
-      left += defaultCellWidth;
-    };
 
-    left += defaultCellWidth;
+      thisRow.push({ width: defaultCellWidth*2, value: sum.toString() });
 
-    this._width = left > this._width ? left : this._width;
+      rows.push(thisRow);
+    });
 
-    this.setSizes();
+    this._top += 5;
+
+    rect.setShadow('1px 1px 5px rgba(0,0,0,0.36)');
+    this._canvas.add(rect);
+
+    this._canvas.add(name);
+    this._canvas.add(nameLine);
+
+
+    this._top += 10;
+    for (i = 0; i < rows.length; i++) {
+      rows[i][0].width = titleWidth + 20;
+      var sizes = this._tableRow(10, this._top, rows[i]);
+      rect.width = sizes.width;
+      rect.height += sizes.height;
+    }
+    rect.height += name.getHeight() + nameLine.getHeight() + 30;
+    nameLine.width = rect.getWidth() - 10;
+    
+    var outcome;
+    if (item.data.outcomeSport) {
+      outcome = new fabric.Text('Энергозатраты: '+item.data.outcomeSport+' кКал', {
+        fill: '#e74c3c',
+        top: this._top + 2,
+        left: titleWidth + 30,
+        fontSize: 11,
+        fontFamily: 'Tahoma'
+      });
+
+      this._canvas.add(outcome);
+    }
+
+    this._width += 10;
+
+    this._top += 20;
   }
 
 };
