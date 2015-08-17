@@ -27,12 +27,12 @@ var defaultFont = 'Tahoma',
     detaultTextFill = '#1c1c1c',
     defaultCellWidth = 30;
 
-function DairyReport(canvasId) {
+function DiaryReport(canvasId) {
   var canvas = this._canvas = new fabric.StaticCanvas(canvasId);
 
 }
 
-DairyReport.prototype = {
+DiaryReport.prototype = {
 
   _styles: {
     header: {
@@ -87,7 +87,7 @@ DairyReport.prototype = {
         height: 20
       }
     },
-    dairyExercise: {
+    diaryExercise: {
       name: {
         fontSize: 14,
         fill: detaultTextFill,
@@ -288,6 +288,15 @@ DairyReport.prototype = {
       } else {
         text.left = x - cell.width + (cell.width - text.getWidth())/2;
       }
+
+      if (cell.color)
+        text.setColor(cell.color);
+
+
+      if (cell.style) {
+        text.setFontStyle(cell.style);
+      }
+
       text.top = top + styles.height - text.getHeight();
       self._canvas.add(text);
     });
@@ -295,7 +304,7 @@ DairyReport.prototype = {
     var underline = [left, top + styles.height, x, top + styles.height];
     this._canvas.add(new fabric.Line(underline, style));
     
-    this._width = x;
+    this._width = this._width > x ? this._width : x;
     this._top = top + styles.height;
 
     return {
@@ -311,7 +320,7 @@ DairyReport.prototype = {
     return fText.getWidth();
   },
 
-  dairyExercise: function(item) {
+  diaryExercise: function(item) {
     var self = this,
         groups = [{ width: 0, value: ' ' }],
         headerCells = [{ width: 0, value: ' ' }],
@@ -322,13 +331,13 @@ DairyReport.prototype = {
         cells = [],
         rows = [];
 
-    var styles = this._styles.dairyExercise.name;
+    var styles = this._styles.diaryExercise.name;
     styles.left = 10;
     
     var name = new fabric.Text(item.data.name, merge({
       left: 10,
       top: this._top + 5
-    }, this._styles.dairyExercise.name));
+    }, this._styles.diaryExercise.name));
 
     var rect = new fabric.Rect({
       left: 5, top: this._top,
@@ -338,7 +347,7 @@ DairyReport.prototype = {
 
     this._top += name.getHeight();
 
-    styles = this._styles.dairyExercise.name.line;
+    styles = this._styles.diaryExercise.name.line;
     styles.left = 10;
     styles.top = this._top + 5;
 
@@ -427,7 +436,7 @@ DairyReport.prototype = {
     this._top += 30;
   },
 
-  dairySuperSet: function(item) {
+  diarySuperSet: function(item) {
     var self = this,
         groups = [{ width: 0, isHeader: true, value: item.data.exercise[0].name }],
         //headerCells = [{ width: 0, value: item.data.exercise[0].rows[0].title }],
@@ -438,13 +447,13 @@ DairyReport.prototype = {
         cells = [],
         rows = [];
 
-    var styles = this._styles.dairyExercise.name;
+    var styles = this._styles.diaryExercise.name;
     styles.left = 10;
     
     var name = new fabric.Text(item.data.title, merge({
       left: 10,
       top: this._top + 5
-    }, this._styles.dairyExercise.name));
+    }, this._styles.diaryExercise.name));
 
     var rect = new fabric.Rect({
       left: 5, top: this._top,
@@ -454,7 +463,7 @@ DairyReport.prototype = {
 
     this._top += name.getHeight();
 
-    styles = this._styles.dairyExercise.name.line;
+    styles = this._styles.diaryExercise.name.line;
     styles.left = 10;
     styles.top = this._top + 5;
 
@@ -568,7 +577,7 @@ DairyReport.prototype = {
         valueWidth = 0,
         titles = [],
         values = [],
-        styles = this._styles.dairyExercise.name;
+        styles = this._styles.diaryExercise.name;
 
     var rect = new fabric.Rect({
       left: 5, top: this._top,
@@ -581,7 +590,7 @@ DairyReport.prototype = {
     this._canvas.add(rect);
     this._top += 5;
 
-    styles.left = 15;
+    styles.left = 10;
     var headerSz = this.simpleText(item.data.name, styles, 'spdname');
 
 
@@ -641,6 +650,75 @@ DairyReport.prototype = {
 
     rect.width = totalWidth + 10;
     rect.height = totalHeight;
+    this._top += 10;
+  },
+
+  diaryFood: function(item) {
+    var self = this;
+    this._top += 10;
+    var styles = this._styles.diaryExercise.name;
+    styles.left = 10;
+
+    var rect = new fabric.Rect({
+      left: 5, top: this._top,
+      width: 480, height: 50,
+      fill: '#fff'
+    });
+
+    rect.setShadow('1px 1px 5px rgba(0,0,0,0.36)');
+
+    this._canvas.add(rect);
+    this._top += 5;
+
+    var tSize = this.simpleText(item.data.title, styles, 'food');
+    var rows = [ [{
+        width: 210, value: ' '
+      }, {
+        width: 50, value: 'Кол.'
+      }, {
+        width: 50, value: 'Калор.'
+      }, {
+        width: 50, value: 'Белки'
+      }, {
+        width: 50, value: 'Жиры'
+      }, {
+        width: 50, value: 'Углев.'
+      }] ];
+
+    this._lines.map(function(line, i) {
+      if (line.food) {
+        line.food = false;
+        self._lines[i].width = 460;
+      }
+    });
+
+    var totalHeight = 0;
+
+    item.data.rows.map(function(row) {
+      var cells = [];
+
+      if (row.title) {
+        cells.push({ value: row.title, width: 210, color: '#1c1c1c' });
+      } else {
+        if (row.isTotal) cells.push({ value: "Итого", width: 210, color: '#1c1c1c', style: 'italic' });
+      }
+
+      row.values.map(function(val) {
+        var text = val===0 ? ' ' : val.toString();
+        cells.push({ value: text, width: 50 });
+      });
+
+
+      rows.push(cells);
+    });
+    totalHeight = self._styles.table.cell.height * rows.length + 40;
+
+    rect.height = totalHeight;
+
+    rows.map(function(row) {
+      self._tableRow(10, self._top, row);
+    });
+
     this._top += 10;
   }
 

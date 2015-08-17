@@ -2,7 +2,7 @@ var gulp = require('gulp'),
     $ = require('gulp-load-plugins')();
 
 gulp.task('build', function() {
-  return gulp.src('./src/dairyReport.js')
+  return gulp.src('./src/diaryReport.js')
     .pipe($.plumber())
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
@@ -34,7 +34,7 @@ gulp.task('serve', function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('./src/dairyReport.js', ['build']);
+  gulp.watch('./src/diaryReport.js', ['build']);
 });
 
 gulp.task('default', ['build', 'watch', 'serve']);
