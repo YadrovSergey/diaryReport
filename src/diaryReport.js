@@ -48,12 +48,14 @@ DiaryReport.prototype = {
     subHeader: {
       fontSize: 14,
       fill: detaultTextFill,
-      fontFamily: defaultFont
+      fontFamily: defaultFont,
+      marginBottom: 10
     },
     text: {
       fontSize: 12,
       fill: detaultTextFill,
-      fontFamily: defaultFont
+      fontFamily: defaultFont,
+      marginBottom: 10
     },
     blockList: {
       title: {
