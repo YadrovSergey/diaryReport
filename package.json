@@ -1,0 +1,30 @@
+{
+  "name": "dairyReport",
+  "version": "1.0.0",
+  "description": "Формирование отчетов на canvas с помощью fabric.js (библиотека для работы с canvas http://fabricjs.com/).",
+  "main": "lib/dairyReport.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/desker/dairyReport"
+  },
+  "author": "Sergey Karinskiy <karinsky.name@gmail.ru>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/desker/dairyReport/issues"
+  },
+  "homepage": "https://github.com/desker/dairyReport",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-load-plugins": "^1.0.0-rc.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-umd": "^0.2.0",
+    "gulp-webserver": "^0.9.1",
+    "jshint-stylish": "^2.0.1"
+  }
+}
