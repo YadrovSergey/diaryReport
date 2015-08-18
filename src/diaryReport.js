@@ -39,19 +39,23 @@ DiaryReport.prototype = {
       fontSize: 16,
       fill: detaultTextFill,
       fontFamily: defaultFont,
+      left: 10,
       line: {
         fill: '#00aeb9',
         height: 2,
-        marginBottom: 10
+        marginBottom: 10,
+        left: 10
       }
     },
     subHeader: {
       fontSize: 14,
       fill: detaultTextFill,
       fontFamily: defaultFont,
-      marginBottom: 10
+      marginBottom: 10,
+      left: 10
     },
     text: {
+      left: 10,
       fontSize: 12,
       fill: detaultTextFill,
       fontFamily: defaultFont,
@@ -123,7 +127,7 @@ DiaryReport.prototype = {
 
   _width: 0,
 
-  _top: 0,
+  _top: 10,
 
   _lines: [],
 
@@ -146,6 +150,7 @@ DiaryReport.prototype = {
 
   setSizes: function() {
     var self = this;
+    this._top += 10;
     this._lines.map(function(line) {
       if (line.isLine) {
         line.width = self._width;
@@ -356,28 +361,35 @@ DiaryReport.prototype = {
 
     var nameLine = new fabric.Rect(styles);
 
-    for (var i = 0; i < item.data.groups.length; i++) {
-      var g = item.data.groups,
-          width = (g[i].end - g[i].start + 1) * defaultCellWidth;
+    if (item.data.groups.length!==0) {
+      for (var i = 0; i < item.data.groups.length; i++) {
+        var g = item.data.groups,
+            width = (g[i].end - g[i].start + 1) * defaultCellWidth;
 
-      groups.push({ width: width, value: lastGroup.toString() });
-      lastGroup++;
+        groups.push({ width: width, value: lastGroup.toString() });
+        lastGroup++;
 
-      if (g[i+1] && g[i].end+1!==g[i+1].start) {
-        for (var j = g[i].end+1; j < g[i+1].start; j++) {
-          groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
-          lastGroup++;
+        if (g[i+1] && g[i].end+1!==g[i+1].start) {
+          for (var j = g[i].end+1; j < g[i+1].start; j++) {
+            groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
+            lastGroup++;
+          }
         }
       }
-      
-    }
 
-    for (i = item.data.groups[item.data.groups.length-1].end; i < item.data.count; i++) {
-      groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
-      lastGroup++;
+      for (i = item.data.groups[item.data.groups.length-1].end; i < item.data.count; i++) {
+        groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
+        lastGroup++;
+      }
+
+    } else {
+      for (var i = 0; i < item.data.count; i++) {
+        groups.push({ width: defaultCellWidth, value: (i+1).toString() });
+      }
     }
+    
     groups.push({ width: defaultCellWidth*2, value: 'Итог' });
-
+    
     rows.push(groups);
 
     item.data.rows.map(function(row) {
@@ -391,12 +403,12 @@ DiaryReport.prototype = {
 
       row.values.map(function(cell) {
         if (thisRow[cell.cell]) {
-          thisRow[cell.cell].value = cell.value;
+          thisRow[cell.cell].value = cell.value.toString();
           sum += parseInt(cell.value);
         }
       });
-
-      thisRow.push({ width: defaultCellWidth*2, value: sum.toString() });
+      //thisRow.push({ width: defaultCellWidth*2, value: sum.toString() });
+      thisRow.push({ width: defaultCellWidth*2, value: row.total.toString() });
 
       rows.push(thisRow);
     });
@@ -472,28 +484,34 @@ DiaryReport.prototype = {
 
     var nameLine = new fabric.Rect(styles);
 
-    for (var i = 0; i < item.data.groups.length; i++) {
-      var g = item.data.groups,
-          width = (g[i].end - g[i].start + 1) * defaultCellWidth;
+    if (item.data.groups.length!==0) {
+      for (var i = 0; i < item.data.groups.length; i++) {
+        var g = item.data.groups,
+            width = (g[i].end - g[i].start + 1) * defaultCellWidth;
 
-      groups.push({ width: width, value: lastGroup.toString() });
-      lastGroup++;
+        groups.push({ width: width, value: lastGroup.toString() });
+        lastGroup++;
 
-      if (g[i+1] && g[i].end+1!==g[i+1].start) {
-        for (var j = g[i].end+1; j < g[i+1].start; j++) {
-          groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
-          lastGroup++;
+        if (g[i+1] && g[i].end+1!==g[i+1].start) {
+          for (var j = g[i].end+1; j < g[i+1].start; j++) {
+            groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
+            lastGroup++;
+          }
         }
       }
-      
-    }
 
-    for (i = item.data.groups[item.data.groups.length-1].end; i < item.data.count; i++) {
-      groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
-      lastGroup++;
+      for (i = item.data.groups[item.data.groups.length-1].end; i < item.data.count; i++) {
+        groups.push({ width: defaultCellWidth, value: lastGroup.toString() });
+        lastGroup++;
+      }
+
+    } else {
+      for (var i = 0; i < item.data.count; i++) {
+        groups.push({ width: defaultCellWidth, value: (i+1).toString() });
+      }
     }
     groups.push({ width: defaultCellWidth*2, value: 'Итог' });
-
+    
     rows.push(groups);
 
     var fullWidth = 0;
@@ -518,12 +536,14 @@ DiaryReport.prototype = {
 
         row.values.map(function(cell) {
           if (thisRow[cell.cell]) {
-            thisRow[cell.cell].value = cell.value;
+            thisRow[cell.cell].value = cell.value.toString();
             sum += parseInt(cell.value);
           }
         });
 
-        thisRow.push({ width: defaultCellWidth*2, value: sum.toString() });
+        //thisRow.push({ width: defaultCellWidth*2, value: sum.toString() });
+        
+        thisRow.push({ width: defaultCellWidth*2, value: row.total.toString() });
 
         rows.push(thisRow);
       });
