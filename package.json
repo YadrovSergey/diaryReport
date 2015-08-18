@@ -2,7 +2,7 @@
   "name": "dairyReport",
   "version": "1.0.0",
   "description": "Формирование отчетов на canvas с помощью fabric.js (библиотека для работы с canvas http://fabricjs.com/).",
-  "main": "lib/dairyReport.js",
+  "main": "lib/diaryReport.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

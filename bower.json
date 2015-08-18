@@ -13,7 +13,7 @@
     "test",
     "tests"
   ],
-  "main": "lib/dairyReport.js",
+  "main": "lib/diaryReport.js",
   "dependencies": {
     "fabric": "~1.5.0"
   }

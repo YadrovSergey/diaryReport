@@ -29,7 +29,7 @@ var defaultFont = 'Tahoma',
 
 function DiaryReport(canvasId) {
   var canvas = this._canvas = new fabric.StaticCanvas(canvasId);
-
+  canvas.setBackgroundColor('#fff');
 }
 
 DiaryReport.prototype = {
