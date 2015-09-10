@@ -70,10 +70,8 @@ width - ширина блока.
     }
 ```
 
-Цвет: #00aeb9
-Толщина лини: 2px
 
-![](http://storage-145851-1.cs.clodoserver.ru/test/header.png)
+![](http://storage-145851-1.cs.clodoserver.ru/test/macronetrients.png)
 
 ..................................................................
 
