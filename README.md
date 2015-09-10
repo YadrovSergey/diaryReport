@@ -50,19 +50,19 @@ width - ширина блока.
     {
       "type": "macronutrients",
       "data": {
-        header: "ПОСТУПЛЕНИЕ МАКРОНУТРИЕНТОВ",
-        width: 500,
-        nutrients: [
+        "header": "ПОСТУПЛЕНИЕ МАКРОНУТРИЕНТОВ",
+        "width": 500,
+        "nutrients": [
               /*см. uimzr/components/FoodDiaryMacronutrients/Spec/FoodDiaryMacronutrientsSpec.jsx*/
               {
-                        label: "Белки",
-                        value: "80 г",
-                        percent: "80%",
-                        tags: [
-                            { percent: 80, value: "90"}
+                        "label": "Белки",
+                        "value": "80 г",
+                        "percent": "80%",
+                        "tags": [
+                            { "percent": 80, "value": "90"}
                         ],
-                        barColor: "#FECE76",
-                        barPercent: 80
+                        "barColor": "#FECE76",
+                        "barPercent": 80
                     },
                     {...}
         ]
