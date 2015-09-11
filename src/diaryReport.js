@@ -742,6 +742,150 @@ DiaryReport.prototype = {
     });
 
     this._top += 10;
+  },
+
+  _mzrLine: function(data, width) {
+    var labelWidth = 100,
+        self = this,
+        label = new fabric.Text(data.label, {
+          fontFamily: defaultFont,
+          fontSize: 12,
+          top: this._top+10
+        });
+
+    label.left = (labelWidth - label.getWidth())/2;
+
+    var perc = new fabric.Text(data.percent, {
+      fontFamily: defaultFont,
+      fontSize: 12,
+      top: this._top + 20,
+      left: width - 50
+    });
+
+    this._canvas.add(perc);
+
+    var line1 = new fabric.Rect({
+      left: labelWidth,
+      width: 1,
+      height: 40,
+      top: this._top+5,
+      fill: '#999'
+    });
+
+    var lineWidth = width - labelWidth - 60;
+
+    var line2 = new fabric.Rect({
+      left: labelWidth,
+      top: this._top + 25,
+      width: lineWidth,
+      height: 1,
+      fill: '#999'
+    });
+
+    var barWidth = lineWidth * data.barPercent / 100;
+
+    var bar = new fabric.Rect({
+      left: labelWidth + 1,
+      top: this._top + 10,
+      height: 15,
+      width: barWidth - 1,
+      fill: data.barColor
+    });
+
+    bar.setShadow('1px 1px 5px rgba(0,0,0,0.36)');
+
+
+    this._canvas.add(line1);
+    this._canvas.add(line2);
+    this._canvas.add(bar);
+
+    data.tags.map(function(tag) {
+      var tagLeft = labelWidth + lineWidth * tag.percent / 100;
+      var l = new fabric.Rect({
+        width: 1,
+        height: 9,
+        fill: '#999',
+        left: tagLeft,
+        top: self._top + 21
+      });
+
+      var tagLabel = new fabric.Text(tag.value, {
+        fontFamily: defaultFont,
+        fontSize: 11,
+        top: self._top + 10
+      });
+
+      tagLabel.left = tagLeft - (tagLabel.getWidth() / 2);
+
+      self._canvas.add(l);
+      self._canvas.add(tagLabel);
+    });
+
+    this._canvas.add(label);
+    this._top += label.getHeight() + 10;
+
+    var value = new fabric.Text(data.value, {
+      fontFamily: defaultFont,
+      fontSize: 10,
+      fontWeight: 'bold',
+      top: this._top
+    });
+    value.left = (labelWidth - value.getWidth())/2;
+    this._canvas.add(value);
+
+
+    this._top += value.getHeight();
+  },
+
+  macronutrients: function(item) {
+    var self = this;
+
+    this._top += 10;
+    
+    var rect = new fabric.Rect({
+      left: 5, top: this._top,
+      width: item.data.width, height: 50,
+      fill: '#fff'
+    });
+
+    var topStart = this._top;
+
+    rect.setShadow('1px 1px 5px rgba(0,0,0,0.36)');
+    
+    var mainRect = new fabric.Rect({
+      left: 5, top: this._top,
+      width: item.data.width, height: 100,
+      fill: '#fff'
+    });
+
+    mainRect.setShadow('1px 1px 5px rgba(0,0,0,0.36)');
+
+    this._canvas.add(mainRect);
+
+    this._canvas.add(rect);
+
+    var text = new fabric.Text(item.data.header, {
+      top: this._top + 18,
+      fontFamily: 'Tahoma',
+      fontSize: 12,
+      fontWeight: 'bold',
+      fill: '#00AEB9'
+    });
+
+    var left = (item.data.width - text.getWidth())/2;
+    text.left = left;
+
+    this._canvas.add(text);
+    this._top += 60;
+
+    item.data.nutrients.map(function(nut) {
+      self._mzrLine(nut, item.data.width);
+    });
+
+    this._top += 15;
+    mainRect.height = this._top - topStart;
+
+
   }
 
 };

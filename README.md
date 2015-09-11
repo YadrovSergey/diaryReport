@@ -38,6 +38,43 @@ Padding всего отчета 10px.
 Все глобальные переменные стилей вынести в отдельный файл (commonStyle).
 ..................................................................
 
+###Тип блока - **macronutrients**
+
+Данный блок служит для отображения диаграммы макронутриентов.
+Входящие данные аналогичны ранее сделанному компоненту. Описание здесь uimzr/components/FoodDiaryMacronutrients/Spec/FoodDiaryMacronutrientsSpec.jsx
+
+
+width - ширина блока.
+
+``` json
+    {
+      "type": "macronutrients",
+      "data": {
+        "header": "ПОСТУПЛЕНИЕ МАКРОНУТРИЕНТОВ",
+        "width": 500,
+        "nutrients": [
+              /*см. uimzr/components/FoodDiaryMacronutrients/Spec/FoodDiaryMacronutrientsSpec.jsx*/
+              {
+                        "label": "Белки",
+                        "value": "80 г",
+                        "percent": "80%",
+                        "tags": [
+                            { "percent": 80, "value": "90"}
+                        ],
+                        "barColor": "#FECE76",
+                        "barPercent": 80
+                    },
+                    {...}
+        ]
+      }
+    }
+```
+
+
+![](http://storage-145851-1.cs.clodoserver.ru/test/macronetrients.png)
+
+..................................................................
+
 ###Тип блока - **header**
 
 Данный блок служит для отображения заголовка отчета.
